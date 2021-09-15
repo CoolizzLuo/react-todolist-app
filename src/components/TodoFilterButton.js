@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const FilterBtnWarpper = styled.div`
+const FilterBtnWrapper = styled.div`
   margin: 2rem 0;
   display: flex;
 `
@@ -25,11 +25,11 @@ const TodoFilterButton = ({ filterValue, setFilter }) => {
   const btnList = ['All', 'Done', 'Todo']
 
   return (
-    <FilterBtnWarpper>
+    <FilterBtnWrapper>
       { 
         btnList.map((btn) => <Button key={ btn } className={ filterValue === btn ? 'active' : '' } onClick={ () => setFilter(btn) }>{ btn }</Button>) 
       }
-    </FilterBtnWarpper>
+    </FilterBtnWrapper>
   )
 }
 

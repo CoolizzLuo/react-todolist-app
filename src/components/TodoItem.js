@@ -1,3 +1,4 @@
+import { useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import useInput from '../hooks/useInput'
 
@@ -57,8 +58,7 @@ const TodoItemAction = styled.div`
 `
 
 const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, deleteTodo }) => {
-  const isEditing = editing === todo.id
-
+  const isEditing = useMemo(()=> editing === todo.id, [editing, todo])
   const TodoEditing = () => {
     const { value, setValue, handleChange } = useInput(todo.content)
 
@@ -88,21 +88,21 @@ const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, delet
       </>
     )
   }
+  
+  const handleSetEdit = () => (!editing || (!isEditing && window.confirm('give up editing ?'))) && setEditing(todo.id)
+  const handleDeleteTodo = () => (window.confirm(`sure delete this todo: ${todo.content}`) && deleteTodo(todo.id))
+  const handleChangeDone = () => changeDoneTodo(todo.id)
 
   const TodoShowing = () => {
-    const handleSetEdit = () => ((!editing) || (!isEditing && window.confirm('give up editing ?'))) && setEditing(todo.id)
-    const handleChangeDone = () => changeDoneTodo(todo.id)
-    const handleDeleteTodo = () => (window.confirm(`sure delete this todo: ${todo.content}`) && deleteTodo(todo.id))
-
     return (
       <>
         <TodoItemContent>
-          <h3 className={ todo.isDone ? 'done' : ''}>{ todo.content }</h3>
+          <h3>{ todo.content }</h3>
         </TodoItemContent>
         <TodoItemAction>
           <button onClick={ handleSetEdit }><i className="fa fa-edit"></i></button>
           <button onClick={ handleChangeDone }>
-            {todo.isDone ? <i className="fa fa-check-square"></i> : <i className="fa fa-square"></i>}
+            <i className={`fa ${todo.isDone ? 'fa-check-square' : 'fa-square'}`}></i>
           </button>
           <button onClick={ handleDeleteTodo }><i className="fa fa-trash"></i></button>
         </TodoItemAction>
@@ -112,7 +112,11 @@ const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, delet
 
   return(
     <TodoItemWrapper>
-      { isEditing ? <TodoEditing/> : <TodoShowing/> }
+      { 
+        isEditing ? 
+        <TodoEditing/> : 
+        <TodoShowing/> 
+      }
     </TodoItemWrapper>
   )
 }

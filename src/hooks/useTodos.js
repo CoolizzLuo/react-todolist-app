@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { v4 } from 'uuid'
 
 const useTodos = (initialValue = [], localStorageKey = 'todos') => {
@@ -14,7 +14,7 @@ const useTodos = (initialValue = [], localStorageKey = 'todos') => {
 
   useEffect(() => window.localStorage.setItem(localStorageKey, JSON.stringify(todos)))
 
-  const handleAddTodo = (todoContent) => {
+  const handleAddTodo = useCallback((todoContent) => {
     setTodos([
       {
         id: v4(),
@@ -23,9 +23,9 @@ const useTodos = (initialValue = [], localStorageKey = 'todos') => {
       },
       ...todos
     ])
-  }
+  }, [todos])
 
-  const handleUpdateTodo = (id, newContent) => {
+  const handleUpdateTodo = useCallback((id, newContent) => {
     setTodos(todos.map((todo) => {
       if (todo.id !== id) return todo
       return {
@@ -33,9 +33,9 @@ const useTodos = (initialValue = [], localStorageKey = 'todos') => {
         content: newContent
       }
     }))
-  }
+  }, [todos])
 
-  const handleChangeDoneTodo = (id) => {
+  const handleChangeDoneTodo = useCallback((id) => {
     setTodos(todos.map((todo) => {
       if (todo.id !== id) return todo
       return {
@@ -43,11 +43,11 @@ const useTodos = (initialValue = [], localStorageKey = 'todos') => {
         isDone: !todo.isDone
       }
     }))
-  }
+  }, [todos])
 
-  const handleDeleteTodo = (id) => {
+  const handleDeleteTodo = useCallback((id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
-  }
+  }, [todos])
   
   const filterTodos = useMemo(() => {
     const options = {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import TodoInput from './TodoInput'
 import TodoFilterButton from './TodoFilterButton'
@@ -9,9 +9,25 @@ const TodoItemList = styled.ul`
   margin: 3rem 0 1.5rem;
 `
 
-const TodoLen = styled.div`
+const TodoFooter = styled.div`
   font-size: 1.2rem;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+`
+
+const Button = styled.button`
+  font-size: 1rem;
+  padding: .4rem .8rem;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  &.active,
+  &:hover {
+    background: #f9ca24;
+    color: #333;
+  }
 `
 
 const initialTodo = [
@@ -21,8 +37,11 @@ const initialTodo = [
 ]
 
 const TodoApp = () => {
-  const [editing, setEditing] = useState(null); 
+  const [editing, setEditing] = useState(null)
+
   const {
+    todos,
+    setTodos,
     filterValue,
     setFilterValue,
     handleAddTodo,
@@ -33,6 +52,16 @@ const TodoApp = () => {
   } = useTodos(initialTodo)
 
   const handleInputAdd = (value) => editing ? alert('please complete your editing') : handleAddTodo(value)
+  const handleClearTodo = () => {
+    if (!todos.length) return alert('already empty data !')
+    if (window.confirm('sure clear all todos ?')) {
+      setTodos([])
+      setEditing(null)
+    }
+  }
+
+  const filterTodosLen = useMemo(()=> filterTodos.length, [filterTodos])
+
 
   return (
     <>
@@ -40,18 +69,22 @@ const TodoApp = () => {
       <TodoFilterButton filterValue={ filterValue } setFilter={ setFilterValue } />
       <TodoItemList>
         {
-          filterTodos.map((todo) => <TodoItem 
-            key= { todo.id }
-            todo={ todo } 
-            editing= { editing } 
-            setEditing={ setEditing }
-            updateTodo={ handleUpdateTodo } 
-            changeDoneTodo={ handleChangeDoneTodo } 
-            deleteTodo={ handleDeleteTodo } />
+          filterTodos.map((todo) => (
+            <TodoItem 
+              key= { todo.id }
+              todo={ todo } 
+              editing= { editing } 
+              setEditing={ setEditing }
+              updateTodo={ handleUpdateTodo } 
+              changeDoneTodo={ handleChangeDoneTodo } 
+              deleteTodo={ handleDeleteTodo } />
           )
-        }
+        )}
       </TodoItemList>
-      <TodoLen>total: { filterTodos.length }</TodoLen>
+      <TodoFooter>
+        total: { filterTodosLen }
+        <Button onClick={ handleClearTodo }>Clear all</Button>
+      </TodoFooter>
     </>
   )
 }

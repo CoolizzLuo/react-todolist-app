@@ -78,8 +78,8 @@ const TodoApp = () => {
               updateTodo={ handleUpdateTodo } 
               changeDoneTodo={ handleChangeDoneTodo } 
               deleteTodo={ handleDeleteTodo } />
-          )
-        )}
+          ))
+        }
       </TodoItemList>
       <TodoFooter>
         total: { filterTodosLen }

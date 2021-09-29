@@ -21,10 +21,11 @@ const TodoItemContent = styled.div`
     font-size: 1.3rem;
     font-weight: 500;
     word-break: break-all;
-    &.done {
+
+    ${({isDone}) => isDone && `
       opacity: 0.4;
       text-decoration: line-through;
-    }
+    `}
   }
   input {
     max-width: 90%;
@@ -56,6 +57,7 @@ const TodoItemAction = styled.div`
     }
   }
 `
+
 
 const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, deleteTodo }) => {
   const isEditing = useMemo(()=> editing === todo.id, [editing, todo])
@@ -93,29 +95,23 @@ const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, delet
   const handleDeleteTodo = () => (window.confirm(`sure delete this todo: ${todo.content}`) && deleteTodo(todo.id))
   const handleChangeDone = () => changeDoneTodo(todo.id)
 
-  const TodoShowing = () => {
-    return (
-      <>
-        <TodoItemContent>
-          <h3>{ todo.content }</h3>
-        </TodoItemContent>
-        <TodoItemAction>
-          <button onClick={ handleSetEdit }><i className="fa fa-edit"></i></button>
-          <button onClick={ handleChangeDone }>
-            <i className={`fa ${todo.isDone ? 'fa-check-square' : 'fa-square'}`}></i>
-          </button>
-          <button onClick={ handleDeleteTodo }><i className="fa fa-trash"></i></button>
-        </TodoItemAction>
-      </>
-    )
-  }
-
   return(
     <TodoItemWrapper>
-      { 
-        isEditing ? 
-        <TodoEditing/> : 
-        <TodoShowing/> 
+      {  
+        isEditing ?
+        <TodoEditing/> :
+        <>
+          <TodoItemContent  isDone={todo.isDone}>
+            <h3>{ todo.content }</h3>
+          </TodoItemContent>
+          <TodoItemAction>
+            <button onClick={ handleSetEdit }><i className="fa fa-edit"></i></button>
+            <button onClick={ handleChangeDone }>
+              <i className={`fa ${todo.isDone ? 'fa-check-square' : 'fa-square'}`}></i>
+            </button>
+            <button onClick={ handleDeleteTodo }><i className="fa fa-trash"></i></button>
+          </TodoItemAction>
+        </>
       }
     </TodoItemWrapper>
   )

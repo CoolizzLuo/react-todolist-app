@@ -13,4 +13,5 @@ body {
   font-size: 1.1rem;
   font-family: 'Quicksand', sans-serif;
   box-sizing: border-box;
+  padding: 5px;
 }

@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 const FilterBtnWrapper = styled.div`
@@ -11,23 +12,34 @@ const Button = styled.button`
   font-size: 1.1rem;
   color: #555;
   border: 1px solid #ccc;
-  transition: background 0.1s;
-
+  transition: background 0.2s;
   cursor: pointer;
-  &.active,
+
   &:hover {
     background: #f9ca24;
     color: #333;
   }
+  ${({active}) => active && `
+    background: #f9ca24;
+    color: #333;
+  `}
+  
 `
 
 const TodoFilterButton = ({ filterValue, setFilter }) => {
-  const btnList = ['All', 'Done', 'Todo']
+  const btnList = useRef(['All', 'Done', 'Todo'])
 
   return (
     <FilterBtnWrapper>
       { 
-        btnList.map((btn) => <Button key={ btn } className={ filterValue === btn ? 'active' : '' } onClick={ () => setFilter(btn) }>{ btn }</Button>) 
+        btnList.current.map((btn) => (
+          <Button 
+            key={btn} 
+            active={filterValue === btn} 
+            onClick={() => setFilter(btn)}>
+            { btn }
+          </Button>
+        ))
       }
     </FilterBtnWrapper>
   )

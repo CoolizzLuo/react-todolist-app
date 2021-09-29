@@ -11,7 +11,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },
-  "homepage": "https://coolizz.github.io/react-todo-app",
+  "homepage": "https://coolizz.github.io/react-todolist-app",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

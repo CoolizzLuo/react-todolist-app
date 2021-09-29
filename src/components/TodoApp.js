@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import TodoInput from './TodoInput'
 import TodoFilterButton from './TodoFilterButton'
@@ -22,8 +22,13 @@ const Button = styled.button`
   color: #555;
   border: 1px solid #ccc;
   border-radius: 6px;
+  box-shadow: .1rem .1rem .1rem #999;
   cursor: pointer;
-  &.active,
+  &.active {
+    transform: translateY(.2rem);
+    box-shadow: none;
+    transform: scale(1.05);
+  }
   &:hover {
     background: #f9ca24;
     color: #333;
@@ -51,7 +56,7 @@ const TodoApp = () => {
     filterTodos
   } = useTodos(initialTodo)
 
-  const handleInputAdd = (value) => editing ? alert('please complete your editing') : handleAddTodo(value)
+  const handleInputAdd = useCallback((value) => editing ? alert('please complete your editing') : handleAddTodo(value), [editing, handleAddTodo])
   const handleClearTodo = () => {
     if (!todos.length) return alert('already empty data !')
     if (window.confirm('sure clear all todos ?')) {

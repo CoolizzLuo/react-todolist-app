@@ -21,10 +21,12 @@ const TodoItemContent = styled.div`
     font-size: 1.3rem;
     font-weight: 500;
     word-break: break-all;
+    transition: all .6s;
 
     ${({isDone}) => isDone && `
       opacity: 0.4;
       text-decoration: line-through;
+      font-style: italic;
     `}
   }
   input {
@@ -64,14 +66,15 @@ const TodoItem = ({ todo, editing, setEditing, updateTodo, changeDoneTodo, delet
   const TodoEditing = () => {
     const { value, setValue, handleChange } = useInput(todo.content)
 
-    const update = () => {
+    const update = useCallback(() => {
       if (!value.trim()) return alert('must be have input value')
       if (!window.confirm('sure update todo ?')) return
+  
       updateTodo(todo.id, value)
       setValue('')
       setEditing(null)
-    }
-    const handleCancel = () => window.confirm('sure give editing ?') && setEditing(null)
+    }, [setValue, value])
+    const handleCancel = useCallback(() =>  window.confirm('sure give editing ?') && setEditing(null), [])
 
     const handleInputKeyUp = (e) => {
       if (e.key === 'Enter') return update()

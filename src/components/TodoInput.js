@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import useInput from '../hooks/useInput'
 
@@ -36,17 +37,21 @@ const Button = styled.button`
 
 const TodoAddInput = ({ addTodo }) => {
   const { value, setValue, handleChange, handleEscKey } = useInput()
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault()
 
     if (!value.trim()) return alert('Please input some words')
     addTodo(value)
     setValue('')
-  }
+  }, [addTodo, value, setValue])
 
   return (
     <TodoInputWrapper onSubmit={ handleSubmit }>
-      <Input type="text" value={ value } onChange={ handleChange } onKeyUp={ handleEscKey } />
+      <Input 
+        type="text" 
+        value={value} 
+        onChange={handleChange} 
+        onKeyUp={handleEscKey} />
       <Button>Add item</Button>
     </TodoInputWrapper>
   )

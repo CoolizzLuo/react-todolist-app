@@ -41,15 +41,16 @@ const Footer = styled.footer`
 
   span {
     display: block;
-    font-size: 0.8rem;
+    font-size: .9rem;
     font-weight: 300;
     margin-bottom: 0.7rem;
     margin-top: 0.2rem;
   }
 
   a {
-    color: #ddd;
+    color: #f9ca24;
     text-decoration: none;
+    font-weight: 700;
     font-style: italic;
   }
 `
